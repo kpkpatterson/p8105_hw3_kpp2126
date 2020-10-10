@@ -100,7 +100,13 @@ This new dataset contains `r nrow(accel_df)` rows and `r ncol(accel_df)` columns
 
 Aggregate dataset across minutes to create a total activity variable for each day.
 ```{r}
-
+accel_aggdf = accel_df %>%
+  group_by(week, day_id, day) %>%
+  summarize(activity_sum = sum(activity_counts)) %>%
+  arrange(week) %>%
+  rename("study day" = day_id,
+         "total activity" = activity_sum)
+  knitr::kable(accel_aggdf)
 ```
 
-
+The aggregated accelerometer dataset doesn't seem to follow any particular trend, I arranged by `week` initially to see if there was increased or decreased activity as each week progressed, but there is no such pattern observed. Then, I saw that higher `total activity` values around Friday to Sunday, but after week 3 this pattern did not hold up. There are very low values for `study day` 24 and 31, which might indicate that less observations were taken on these two days resulting in their outlier behavior. I also arranged by descending order of `total activity` (not shown), but after reviewing the corresponding variables (i.e., `week`, `day`, `study day`) no such pattern was observed. 
