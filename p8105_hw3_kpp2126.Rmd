@@ -137,4 +137,15 @@ accel_actdf
 ```
 The activity counts for the 63 year-old male are highest in the evenings around 8PM to 9PM and then followed by counts at 11AM across all days. As mentioned in the last question, it seemed that highest counts of activity were around the weekend and the plot better illustrates the highest activity counts on Fridays, Sundays, and Mondays. The male does activity more around the mornings and evenings.
 
+# Problem 3
 
+Load NY NOAA dataset
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+```
+
+```{r}
+ny_noaa%>%tibble()
+```
+This dataset contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)` columns. This dataset has 2,595,176 observatons and 7 variables that include a weather station id, date of observation, (tenths of mm), snowfall (mm), snow depth (mm), maximum and minimum temperatures (tenths of degree C). There are missing data for `prcp`, `snow`, `snwd`, `tmax`, and `tmin` variables. The dataset has recorded data from January 1, 1981 through Decmber 31, 2010 from the National Oceanic and Atmospheric Association of the National Centers for Environmental Information.
