@@ -110,3 +110,31 @@ accel_aggdf = accel_df %>%
 ```
 
 The aggregated accelerometer dataset doesn't seem to follow any particular trend, I arranged by `week` initially to see if there was increased or decreased activity as each week progressed, but there is no such pattern observed. Then, I saw that higher `total activity` values around Friday to Sunday, but after week 3 this pattern did not hold up. There are very low values for `study day` 24 and 31, which might indicate that less observations were taken on these two days resulting in their outlier behavior. I also arranged by descending order of `total activity` (not shown), but after reviewing the corresponding variables (i.e., `week`, `day`, `study day`) no such pattern was observed. 
+
+Let's make a single panel plot that shows 24-hour activity time courses for each day (using viridis from library setup)
+```{r}
+accel_actdf = accel_df %>%
+  mutate(minute = as.numeric(minute),
+         hour = minute / 60) %>%
+  group_by(day, hour) %>%
+  summarize(activity_sum = sum(activity_counts)) %>%
+  ggplot(aes(x = hour, y = activity_sum)) +
+  geom_point(aes(color = day)) + geom_line(aes(color = day)) +
+  viridis::scale_color_viridis(name = "day",
+                               discrete = "TRUE",
+                               option = "plasma") +
+  ggtitle("24-Hour Activity Time Courses for each day") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Hour",
+       y = "Activity Counts") +
+  theme(legend.position = "bottom") +
+  scale_x_continuous(breaks = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24), 
+                     labels = c("midnight", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "noon", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM", "midnight")) +
+  scale_y_continuous(
+    breaks = c(0, 50000, 100000, 150000, 200000, 250000, 300000, 350000),
+    labels = c("0", "50,000", "100,0000", "150,000", "200,000", "250,000", "300,000", "350,000"))
+accel_actdf
+```
+The activity counts for the 63 year-old male are highest in the evenings around 8PM to 9PM and then followed by counts at 11AM across all days. As mentioned in the last question, it seemed that highest counts of activity were around the weekend and the plot better illustrates the highest activity counts on Fridays, Sundays, and Mondays. The male does activity more around the mornings and evenings.
+
+
